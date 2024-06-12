@@ -101,4 +101,75 @@ router.post('/signin' ,(req,res,next)=>{
 })
 
 
+// update user 
+
+router.patch('/updateuser/:id',(req,res,next)=>{
+  bcrypt.hash(req.body.password , 10 ).
+  then(hash=>{
+
+    const newUser = {
+      username : req.body.username,
+      password : hash
+  
+    }
+    
+    User.findOneAndUpdate({_id : req.params.id} ,{ $set : newUser}).
+    then(resualt=>{
+      if(resualt){
+        console.log(resualt)
+        res.status(200).json({
+          message:'user  already updated'
+        })
+      }else{
+        console.log(resualt)
+        res.status(404).json({
+          message:'User Not found'
+        })
+      }
+     
+    }).
+    catch(err=>{
+      res.status(404).json({
+        message : err.message
+    })
+  
+  })
+}).
+catch(err=>{
+  res.status(404).json({
+    message : err.message
+})
+
+})
+
+})
+
+// delete user
+router.delete('/deleteuser/:id',(req,res,next)=>{
+
+  User.findOneAndDelete({_id : req.params.id}).
+  then(resualt=>{
+    if(resualt){
+      console.log(resualt)
+      res.status(200).json({
+        message:'user  already deleted'
+      })
+    }else{
+      console.log(resualt)
+        res.status(404).json({
+          message:'User Not found'
+        })
+    }
+ 
+  }).
+  catch(err=>{
+    res.status(404).json({
+      message : err.message
+  })
+  
+  })
+
+
+})
+
 module.exports = router;
