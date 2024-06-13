@@ -11,6 +11,7 @@ const User = require ('../models/User')
 //   res.send('respond with a resource');
 // });
 
+//signup
 router.post('/signup',(req,res,next)=>{
 
   User.find({username: req.body.username}).
@@ -59,7 +60,7 @@ router.post('/signup',(req,res,next)=>{
 })
 })
 
-
+// signin 
 router.post('/signin' ,(req,res,next)=>{
 
   console.log("hi")
@@ -102,7 +103,6 @@ router.post('/signin' ,(req,res,next)=>{
 
 
 // update user 
-
 router.patch('/updateuser/:id',(req,res,next)=>{
   bcrypt.hash(req.body.password , 10 ).
   then(hash=>{
@@ -171,5 +171,7 @@ router.delete('/deleteuser/:id',(req,res,next)=>{
 
 
 })
+
+
 
 module.exports = router;
