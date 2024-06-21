@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 const cors = require('cors')
 const mongoose = require('mongoose')
+const path = require('path')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -35,6 +36,7 @@ db.once('open', function() {
 
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
+app.use(express.static(path.join(__dirname,'productImage')))
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

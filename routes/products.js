@@ -3,7 +3,22 @@ var router = express.Router();
 
 
 const Product = require ('../models/Product')
-
+const multer =  require('multer');
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './productImage/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, new Date().toDateString() + file.originalname)
+  }
+});
+const upload = multer({
+    // dest :'productImage/'
+    storage : storage,
+    limits : {
+        fileSize : 1024 * 1024 * 5
+    }
+})
 
 //get all product 
 router.get('/',(req,res,next)=>{
@@ -57,17 +72,20 @@ router.get('/:id',(req,res,next)=>{
 
 
 //add product
-router.post('/addproduct',(req,res,next)=>{
-    const product = new Product ({
+router.post('/addproduct', upload.single('myfile') ,(req,res,next)=>{
+  console.log(req.file ) 
+  const product = new Product ({
         name : req.body.name ,
-        price : req.body.price
+        price : req.body.price,
+        image :req.file.path
     })
 
     product.save().
     then(result=>{
       console.log(product)
       res.status(200).json({
-        message:"product already added "
+        message:"product already added " ,
+        product : result
       })
     }).
     catch(err=>{

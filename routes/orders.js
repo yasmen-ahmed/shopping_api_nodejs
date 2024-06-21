@@ -4,6 +4,7 @@ var router = express.Router();
 const Order = require ('../models/Order')
 
 
+
 router.post('/addOrder', (req,res,next)=>{
     const newOrder = new Order ({
         user : req.body.user,
@@ -48,7 +49,7 @@ router.patch('/:id', (req,res,next)=>{
         product : req.body.product
     }
 //    const newProduct = req.body.product
-    Order.findOneAndUpdate({_id : req.params.id} ,{ $set : newOrder}).
+    Order.findById(req.params.id).
     then(
         resualt=>{
             if(resualt){
@@ -128,4 +129,23 @@ router.patch('/:id', (req,res,next)=>{
 //         });
 //     });
 // });
+
+
+// delete order
+router.delete('/:id', function(req, res) {
+    Order.deleteOne({_id: req.params.id}).
+    then(result=>{
+        res.status(200).json({
+                        message: 'Order deleted successfully'
+                    });
+    }).
+    catch(err => {
+                res.status(500).json({
+                    message: err.message
+                });
+            });
+
+})
+
+
 module.exports = router;
