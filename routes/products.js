@@ -4,6 +4,14 @@ var router = express.Router();
 
 const Product = require ('../models/Product')
 const multer =  require('multer');
+const fileFilter = function (req, file, cb) {
+  if(file.mimetype === 'image/jpeg') {
+  cb(null,true)
+}else{
+  cb(new Error('please uplaod jpege file'),false)
+}
+ 
+}
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './productImage/')
@@ -17,7 +25,8 @@ const upload = multer({
     storage : storage,
     limits : {
         fileSize : 1024 * 1024 * 5
-    }
+    },
+    fileFilter:fileFilter
 })
 
 //get all product 
